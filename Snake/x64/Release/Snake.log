@@ -1,0 +1,10 @@
+﻿  Game.cpp
+D:\Programare\Snake\Snake\Game.cpp(43,48): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\Programare\Snake\Snake\Game.cpp(138,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Game.cpp(138,38): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Generating code
+  1 of 115 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Snake.vcxproj -> D:\Programare\Snake\Snake\x64\Release\Snake.exe
