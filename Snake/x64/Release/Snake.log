@@ -1,10 +1,27 @@
-﻿  Game.cpp
+﻿  Apple.cpp
+D:\Programare\Snake\Snake\Apple.cpp(34,68): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Apple.cpp(34,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Game.cpp
 D:\Programare\Snake\Snake\Game.cpp(19,30): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\Programare\Snake\Snake\Game.cpp(112,12): warning C4101: 'j': unreferenced local variable
-D:\Programare\Snake\Snake\Game.cpp(112,9): warning C4101: 'i': unreferenced local variable
+D:\Programare\Snake\Snake\Game.cpp(123,12): warning C4101: 'j': unreferenced local variable
+D:\Programare\Snake\Snake\Game.cpp(123,9): warning C4101: 'i': unreferenced local variable
+  Snake.cpp
+D:\Programare\Snake\Snake\Snake.cpp(49,65): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(49,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(52,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(52,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(75,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(75,54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(84,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(84,54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(93,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(93,54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(102,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Snake.cpp(102,54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Source.cpp
   Generating code
-  1 of 110 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  23 of 114 functions (20.2%) were compiled, the rest were copied from previous compilation.
+    4 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Snake.vcxproj -> D:\Programare\Snake\Snake\x64\Release\Snake.exe
