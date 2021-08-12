@@ -10,6 +10,7 @@ public:
 	
 	sf::Sprite GetSprite();
 	point GetLocation();
+	sf::Vector2f GetPosition();
 
 	void PlaceApple();
 

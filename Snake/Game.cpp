@@ -96,6 +96,16 @@ void Game::MakeScore()
     this->spriteScore.setPosition(30 * 16, 220);
 }
 
+void Game::VerifyApplePlacement()
+{
+    int length = this->sarpe.GetLength();
+    for(int i = -1; i < length; i++)
+        if (this->sarpe.GetSnake(i) == this->mar.GetPosition()) {
+            this->mar.PlaceApple();
+            this->VerifyApplePlacement();
+        }
+}
+
 void Game::GrowSnake(int& score)
 {
     point capSarpe = this->sarpe.GetHead();
@@ -104,6 +114,7 @@ void Game::GrowSnake(int& score)
         this->sarpe.IncreaseLength();
         score++;
         this->mar.PlaceApple();
+        this->VerifyApplePlacement();
     }
 }
 

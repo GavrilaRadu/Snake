@@ -20,7 +20,11 @@ point apple::GetLocation()
 	return this->locatie;
 }
 
-//TODO: Verify if apple is spawned ON the snake
+sf::Vector2f apple::GetPosition()
+{
+	return this->spriteMar.getPosition();
+}
+
 void apple::PlaceApple()
 {
 	this->locatie.y = rand() % 30;

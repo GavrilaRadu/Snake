@@ -26,6 +26,21 @@ point snake::GetHead()
 	return this->head;
 }
 
+int snake::GetLength()
+{
+    return this->length;
+}
+
+sf::Vector2f snake::GetSnake(int whatPart)
+{
+    //head
+    if(whatPart == -1)
+        return this->spriteCap.getPosition();
+    
+    //body
+    return this->body[whatPart].getPosition();
+}
+
 void snake::PlaceSnake()
 {
     this->head.y = rand() % 29 + 1;

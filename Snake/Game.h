@@ -19,6 +19,8 @@ public:
 	void MakeBackground();
 	void MakeTimer();
 	void MakeScore();
+	
+	void VerifyApplePlacement();
 	void GrowSnake(int& score);
 
 	void Run();

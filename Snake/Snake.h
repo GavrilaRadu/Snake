@@ -12,7 +12,8 @@ public:
 	void SetTail(point punct);
 
 	point GetHead();
-	point GetTail();
+	int GetLength();
+	sf::Vector2f GetSnake(int whatPart);
 
 	void PlaceSnake();
 	void PrintSnake(sf::RenderWindow *window);
@@ -22,7 +23,6 @@ public:
 
 private:
 	struct point head;
-	struct point tail;
 
 	sf::Texture texturaCap;
 	sf::Sprite spriteCap;
