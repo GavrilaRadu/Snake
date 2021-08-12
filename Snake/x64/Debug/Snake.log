@@ -1,5 +1,5 @@
 ﻿  Game.cpp
-D:\Programare\Snake\Snake\Game.cpp(43,48): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\Programare\Snake\Snake\Game.cpp(138,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\Programare\Snake\Snake\Game.cpp(138,38): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programare\Snake\Snake\Game.cpp(19,30): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\Programare\Snake\Snake\Game.cpp(112,12): warning C4101: 'j': unreferenced local variable
+D:\Programare\Snake\Snake\Game.cpp(112,9): warning C4101: 'i': unreferenced local variable
   Snake.vcxproj -> D:\Programare\Snake\Snake\x64\Debug\Snake.exe
