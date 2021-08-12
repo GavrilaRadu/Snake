@@ -8,8 +8,14 @@ public:
 	apple();
 	~apple();
 	
-	void PlaceApple(int board[30][20]);
+	sf::Sprite GetSprite();
+	point GetLocation();
+
+	void PlaceApple();
 
 private:
 	point locatie;
+
+	sf::Texture texturaMar;
+	sf::Sprite spriteMar;
 };

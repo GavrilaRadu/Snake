@@ -14,14 +14,24 @@ public:
 	point GetHead();
 	point GetTail();
 
-	void PlaceSnake(int board[30][20]);
-	bool Move(int board[30][20], int& scor, char direction);
-	bool CalculateTail(int board[30][20]);
-	bool Grow(int board[30][20], int& scor);
-	bool Cut(int board[30][20]);
+	void PlaceSnake();
+	void PrintSnake(sf::RenderWindow *window);
+	void Move(char direction);
+	void CalculateBody();
+	void IncreaseLength();
 
 private:
 	struct point head;
 	struct point tail;
+
+	sf::Texture texturaCap;
+	sf::Sprite spriteCap;
+
+	sf::Texture texturaCorp;
+
+	sf::Sprite* body = new sf::Sprite[30];
+
+	int maxLength = 30;
+	int length = 1;
 
 };

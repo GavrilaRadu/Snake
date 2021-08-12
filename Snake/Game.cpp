@@ -1,35 +1,10 @@
 #include "Game.h"
 
-std::string convert_int_string(int nrInt)
-{
-    std::string nrString(10, 'x');
-
-    int clona, putere = 1, i = 0;
-    clona = nrInt;
-
-    if (nrInt == 0) {
-        nrString = "0";
-        nrString.shrink_to_fit();
-    }
-    else {
-        while (clona != 0) {                              //Aflu cate cifre are numarul nostru (cate elemente
-            putere = putere * 10;                       //va avea sirul de caractere)
-            clona = clona / 10;
-        }
-        putere = putere / 10;                           //Vrem ca "putere" sa aiba acelasi nr de cifre ca x, nu cu una mai mult.
-        while (putere != 0) {
-            nrString[i] = (nrInt / putere) % 10 + 48;          //Iau cifra cu cifra si o adaug in sirul de caractere transformata in char
-            i++;                                        //(char)48 = "0"
-            putere = putere / 10;
-        }
-    }
-    nrString.resize(i);
-    nrString.shrink_to_fit();
-    return nrString;
-}
-
 Game::Game()
 {
+    this->MakeBackground();
+    
+    this->font.loadFromFile("arial.ttf");
 }
 
 Game::~Game()
@@ -39,8 +14,11 @@ Game::~Game()
 std::string Game::GetTime()
 {
     sf::Time elapsed = this->clock.getElapsedTime();
+
+    char timeString[33];
+    _itoa_s(elapsed.asSeconds(), timeString, 10);
     
-    return convert_int_string(elapsed.asSeconds());
+    return timeString;
 }
 
 void Game::VerifyIfKeyIsPressed(char& whereToGo)
@@ -67,39 +45,85 @@ void Game::VerifyIfKeyIsPressed(char& whereToGo)
     }
 }
 
+void Game::DrawBMT(sf::RenderWindow* window)
+{
+    //Background
+    window->draw(this->background);
+
+    //Mar
+    window->draw(mar.GetSprite());
+
+    //Timer
+    window->draw(this->spriteTimer);
+    this->time.setString(this->GetTime());
+    window->draw(this->time);
+}
+
+void Game::MakeBackground()
+{
+    this->texturaBackground.loadFromFile("images/Background.png");
+    this->texturaBackground.setRepeated(true);
+
+    this->background.setTexture(&texturaBackground);
+    this->background.setTextureRect(sf::IntRect(0, 0, 480, 320));
+    this->background.setSize(sf::Vector2f(480, 320));
+}
+
+void Game::MakeTimer()
+{
+    this->time.setFont(this->font);
+    this->time.setCharacterSize(32);
+    this->time.setFillColor(sf::Color::Black);
+    this->time.setPosition(572, 102);
+
+    if (!this->texturaTimer.loadFromFile("images/timer.png"))
+        return;
+    this->spriteTimer.setTexture(this->texturaTimer);
+    this->spriteTimer.setPosition(30 * 16, 0);
+}
+
+void Game::MakeScore()
+{
+
+    this->afiScor.setFont(this->font);
+    this->afiScor.setCharacterSize(32);
+    this->afiScor.setFillColor(sf::Color::Black);
+    this->afiScor.setPosition(630, 245);
+
+    if (!this->texturaScore.loadFromFile("images/score.png"))
+        return;
+    this->spriteScore.setTexture(this->texturaScore);
+    this->spriteScore.setPosition(30 * 16, 220);
+}
+
+void Game::GrowSnake(int& score)
+{
+    point capSarpe = this->sarpe.GetHead();
+    point locatieMar = this->mar.GetLocation();
+    if (capSarpe.x == locatieMar.x && capSarpe.y == locatieMar.y) {
+        this->sarpe.IncreaseLength();
+        score++;
+        this->mar.PlaceApple();
+    }
+}
+
 void Game::Run()
 {
-    int i, j, board[30][20], scor = 0;
+    int i, j, scor = 0;
+    char scorString[33];
     char whereToGo = 'r';
 
-    for (i = 0; i < 30; i++)
-        for (j = 0; j < 20; j++)
-            board[i][j] = 0;
-
-    snake sarpe;
-    sarpe.PlaceSnake(board);
-
-    apple mar;
-    mar.PlaceApple(board);
+    this->sarpe.PlaceSnake();
+    this->mar.PlaceApple();
 
     sf::RenderWindow window(sf::VideoMode(700, 320), "Snake");
     sf::Texture texture;
 
-    sf::Sprite sprite, spriteTimer, spriteScore;
+    sf::Sprite sprite, spriteScore;
 
-    sf::Font font;
-    font.loadFromFile("arial.ttf");
-    sf::Text time;
-    time.setFont(font);
-    time.setCharacterSize(32);
-    time.setFillColor(sf::Color::Black);
-    time.setPosition(572, 102);
+    this->MakeTimer();
 
-    sf::Text afiScor;
-    afiScor.setFont(font);
-    afiScor.setCharacterSize(32);
-    afiScor.setFillColor(sf::Color::Black);
-    afiScor.setPosition(630, 245);
+    this->MakeScore();
 
     while (window.isOpen())
     {
@@ -108,59 +132,25 @@ void Game::Run()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            VerifyIfKeyIsPressed(whereToGo);
         }
 
         window.clear();
 
-        for (i = 0; i < 30; i++)
-            for (j = 0; j < 20; j++) {
-                switch (board[i][j])
-                {
-                case 0:
-                    if (!texture.loadFromFile("images/Background.png"))
-                        return;
-                    break;
-                case 1:
-                    if (!texture.loadFromFile("images/AppleBaby.png"))
-                        return;
-                    break;
-                case 2:
-                    if (!texture.loadFromFile("images/Head.png"))
-                        return;
-                    break;
-                default:
-                    if (!texture.loadFromFile("images/Body.png"))
-                        return;
-                    break;
-                }
+        this->DrawBMT(&window);
+        
+        //Scor
+        _itoa_s(scor, scorString, 10);
+        this->afiScor.setString(scorString);
+        window.draw(this->spriteScore);
+        window.draw(this->afiScor);
 
-                sprite.setTexture(texture);
-                sprite.setPosition(i * 16, j * 16);
-                window.draw(sprite);
-            }
-
-        if (!texture.loadFromFile("images/timer.png"))
-            return;
-        spriteTimer.setTexture(texture);
-        spriteTimer.setPosition(30 * 16, 0);
-        window.draw(spriteTimer);
-
-        if (!texture.loadFromFile("images/score.png"))
-            return;
-        spriteScore.setTexture(texture);
-        spriteScore.setPosition(30 * 16, 220);
-        window.draw(spriteScore);
-
-        time.setString(this->GetTime());
-        window.draw(time);
-
-        afiScor.setString(convert_int_string(scor));
-        window.draw(afiScor);
-
-        VerifyIfKeyIsPressed(whereToGo);
-
-        if (sarpe.Move(board, scor, whereToGo) == true)
-            mar.PlaceApple(board);
+        //Sarpe
+        this->sarpe.PrintSnake(&window);
+        for (int i = 0; i < 30000000; i++); //Pentru a incetini jocul
+        this->GrowSnake(scor);
+        this->sarpe.Move(whereToGo);
 
         window.display();
     }

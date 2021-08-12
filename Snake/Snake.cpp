@@ -2,10 +2,18 @@
 
 snake::snake()
 {
+    if (!this->texturaCap.loadFromFile("images/Head.png"))
+        std::cout << "EROARE CAP SARPE !!!";
+    
+    this->spriteCap.setTexture(this->texturaCap);
+
+    if (!this->texturaCorp.loadFromFile("images/Body.png"))
+        std::cout << "EROARE CORP SARPE !!!";
 }
 
 snake::~snake()
 {
+    delete[] body;
 }
 
 void snake::SetHead(point punct)
@@ -13,144 +21,97 @@ void snake::SetHead(point punct)
 	this->head = punct;
 }
 
-void snake::SetTail(point punct)
-{
-	this->tail = punct;
-}
-
 point snake::GetHead()
 {
 	return this->head;
 }
 
-point snake::GetTail()
-{
-	return this->tail;
-}
-
-void snake::PlaceSnake(int board[30][20])
+void snake::PlaceSnake()
 {
     this->head.y = rand() % 29 + 1;
     this->head.x = rand() % 20;
 
-    this->tail.y = this->head.y - 1;
-    this->tail.x = this->head.x;
+    this->spriteCap.setPosition(this->head.y * 16, this->head.x * 16);
 
-    board[this->head.y][this->head.x] = 2;
-    board[this->tail.y][this->tail.x] = 3;
+    this->body[0].setTexture(this->texturaCorp);
+    this->body[0].setPosition((this->head.y - 1) * 16, this->head.x * 16);
 }
 
-bool snake::Move(int board[30][20], int& scor, char direction)
+void snake::PrintSnake(sf::RenderWindow *window)
 {
+    window->draw(this->spriteCap);
+
+    int i;
+    for (i = 0; i < length; i++) {
+        window->draw(this->body[i]);
+    }
+}
+
+void snake::Move(char direction)
+{
+    this->CalculateBody();
+
     switch (direction)
     {
+    case 'u':
+        this->head.x -= 1;
+        if (this->head.x == -1) {
+            this->head.x = 19;
+            this->spriteCap.setPosition(this->head.y * 16, this->head.x * 16);
+        }
+        else this->spriteCap.move(0, -16.f);
+        break;
+
     case 'r':
-        board[this->head.y][this->head.x] = 3;
-        if (this->head.y == 29)
+        this->head.y += 1;
+        if (this->head.y == 30) {
             this->head.y = 0;
-        else this->head.y += 1;
-
-        this->Cut(board);
-
-        return this->Grow(board, scor);
+            this->spriteCap.setPosition(this->head.y * 16, this->head.x * 16);
+        }
+        else this->spriteCap.move(16.f, 0);
+        break;
     
     case 'd':
-        board[this->head.y][this->head.x] = 4;
-        if (this->head.x == 19)
+        this->head.x += 1;
+        if (this->head.x == 20) {
             this->head.x = 0;
-        else this->head.x += 1;
-
-        this->Cut(board);
-
-        return this->Grow(board, scor);
+            this->spriteCap.setPosition(this->head.y * 16, this->head.x * 16);
+        }
+        else this->spriteCap.move(0, 16.f);
+        break;
 
     case 'l':
-        board[this->head.y][this->head.x] = 5;
-        if (this->head.y == 0)
+        this->head.y -= 1;
+        if (this->head.y == -1) {
             this->head.y = 29;
-        else this->head.y -= 1;
-
-        this->Cut(board);
-
-        return this->Grow(board, scor);
-
-    case 'u':
-        board[this->head.y][this->head.x] = 6;
-        if (this->head.x == 0)
-            this->head.x = 19;
-        else this->head.x -= 1;
-
-        if (this->Cut(board) == false)
-            return this->Grow(board, scor);
-        else return false;
+            this->spriteCap.setPosition(this->head.y * 16, this->head.x * 16);
+        }
+        else this->spriteCap.move(-16.f, 0);
+        break;
     }
 }
 
-bool snake::CalculateTail(int board[30][20])
+void snake::CalculateBody()
 {
-    switch (board[this->tail.y][this->tail.x])
-    {
-    case 3:     //dreapta
-        board[this->tail.y][this->tail.x] = 0;
-        if (this->tail.y == 29)
-            this->tail.y = 0;
-        else this->tail.y += 1;
-        return false;
+    int i;
+    for (i = this->length - 1; i >= 1; i--) {
+        if (this->body[i].getPosition() == this->spriteCap.getPosition())
+            this->length = i;
+        this->body[i] = this->body[i - 1];
+    }
+    this->body[0].setPosition(this->spriteCap.getPosition());
+}
 
-    case 4:     //jos
-        board[this->tail.y][this->tail.x] = 0;
-        if (this->tail.x == 19)
-            this->tail.x = 0;
-        else this->tail.x += 1;
-        return false;
+void snake::IncreaseLength()
+{
+    this->length++;
     
-    case 5:     //stanga
-        board[this->tail.y][this->tail.x] = 0;
-        if (this->tail.y == 0)
-            this->tail.y = 29;
-        else this->tail.y -= 1;
-        return false;
+    if (this->length == this->maxLength) {
+        this->maxLength = this->maxLength * 2;
+        sf::Sprite* newBody = new sf::Sprite[this->maxLength];
 
-    case 6:     //sus
-        board[this->tail.y][this->tail.x] = 0;
-        if (this->tail.x == 0)
-            this->tail.x = 19;
-        else this->tail.x -= 1;
-        return false;
-    default:    //se taie
-        return true;
+        memcpy(newBody, this->body, this->maxLength / 2 * sizeof(sf::Sprite));
+        delete[] this->body;
+        this->body = newBody;
     }
-}
-
-bool snake::Grow(int board[30][20], int& scor)
-{
-    if (board[this->head.y][this->head.x] != 1)
-    {
-        this->CalculateTail(board);
-        board[this->head.y][this->head.x] = 2;
-        return false;
-    }
-    board[this->head.y][this->head.x] = 2;
-    scor++;
-    return true; //Trebuie sa plaseze iar marul
-}
-
-bool snake::Cut(int board[30][20])
-{
-    if (board[this->head.y][this->head.x] != 0 && board[this->head.y][this->head.x] != 1) 
-    {
-        int newTail = board[this->head.y][this->head.x];
-
-        board[this->head.y][this->head.x] = 0;
-
-        while (this->CalculateTail(board) == false);
-
-        board[this->head.y][this->head.x] = newTail;
-        this->CalculateTail(board);
-        
-        board[this->head.y][this->head.x] = 2;
-        
-        return true;
-    }
-    return false;
 }
